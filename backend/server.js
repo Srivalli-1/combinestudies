@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import signupRoute from "./routes/signupRoute.js";
 
+
 dotenv.config();
 const app = express();
 
@@ -12,8 +13,11 @@ app.use(express.json());
 app.use("/api", signupRoute);
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.log("❌ Database connection failed:", err.message));
+.then(() => console.log("✅ MongoDB Connected"))
+.catch(err => console.log("❌ Database connection failed:", err.message));
+
+import loginRoute from "./routes/loginroute.js";
+app.use("/api", loginRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

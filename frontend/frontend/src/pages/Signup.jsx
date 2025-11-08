@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -18,14 +19,30 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // password confirmation check
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    console.log("Signup Data:", formData);
-    alert("Signup Successful!");
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/signup", formData);
+      alert(res.data.message);
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        gender: "",
+        age: "",
+        role: "",
+      });
+    } catch (error) {
+      alert(error.response?.data?.message || "Signup failed");
+    }
   };
 
   return (
@@ -137,9 +154,9 @@ const Signup = () => {
               required
             >
               <option value="">Select Role</option>
-              <option value="student">Student</option>
-              <option value="teacher">Teacher</option>
-              <option value="parent">Parent</option>
+              <option value="Student">Student</option>
+              <option value="Teacher">Teacher</option>
+              <option value="Parent">Parent</option>
             </select>
           </div>
 

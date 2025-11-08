@@ -3,6 +3,8 @@ import axios from "axios";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState(""); // ✅ to show success/error messages
+  const [messageType, setMessageType] = useState(""); // success or error
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -12,21 +14,41 @@ function Login() {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:5000/api/login", formData);
-      alert(res.data.message);
-      console.log(res.data);
+      setMessage(res.data.message);
+      setMessageType("success");
+
+      // store logged-in user info
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      // clear form
+      setFormData({ email: "", password: "" });
     } catch (error) {
-      alert(error.response.data.message || "Login failed");
+      setMessage(error.response?.data?.message || "Login failed");
+      setMessageType("error");
     }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-black text-white">
       <div className="bg-black p-10 rounded-xl w-full max-w-md shadow-lg border border-gray-700">
+        {/* Heading */}
         <h2 className="text-2xl font-bold text-center text-blue-400 mb-8">
           LOGIN
         </h2>
 
+        {/* Success/Error message */}
+        {message && (
+          <p
+            className={`text-center mb-4 ${
+              messageType === "success" ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {message}
+          </p>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Email */}
           <div>
             <label className="block mb-1 font-semibold text-lg">Email</label>
             <input
@@ -40,6 +62,7 @@ function Login() {
             />
           </div>
 
+          {/* Password */}
           <div>
             <label className="block mb-1 font-semibold text-lg">Password</label>
             <input
@@ -53,6 +76,7 @@ function Login() {
             />
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             className="w-full bg-blue-400 text-black font-bold py-2 rounded hover:bg-blue-500 transition"

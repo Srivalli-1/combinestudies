@@ -8,12 +8,15 @@ function App() {
   return (
     <div>
       {showLogin ? <Login /> : <Signup />}
-      <button
-        onClick={() => setShowLogin(!showLogin)}
-        className="mt-4 bg-blue-500 text-white p-2 rounded"
-      >
-        {showLogin ? "Go to Signup" : "Go to Login"}
-      </button>
+
+      <div className="text-center mt-4">
+        <button
+          onClick={() => setShowLogin(!showLogin)}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          {showLogin ? "Go to Signup" : "Go to Login"}
+        </button>
+      </div>
     </div>
   );
 }
